@@ -102,3 +102,23 @@ variable "iap_source_ranges" {
   description = "Source ranges for IAP traffic"
   default     = ["35.235.240.0/20"]
 }
+
+
+variable "enable_server_access" {
+  type        = bool
+  description = "Enable server access firewall rules"
+  default     = true
+}
+
+variable "enable_ssh" {
+  type        = bool
+  description = "Enable SSH firewall rules"
+  default     = true
+}
+
+variable "enable_http_https" {
+  type        = bool
+  description = "Enable HTTP and HTTPS firewall rules"
+  default     = true
+}
+

@@ -18,8 +18,9 @@ resource "google_compute_subnetwork" "custom_subnet" {
   network       = google_compute_network.custom_network.self_link
 }
 
-# Firewall rule to allow traffic to the server port
+# Firewall rule to allow traffic to the server port (conditionally created)
 resource "google_compute_firewall" "server_access" {
+  count   = var.enable_server_access ? 1 : 0  # Create resource only if enable_server_access is true
   name    = var.firewall_name
   network = google_compute_network.custom_network.name
 
@@ -31,8 +32,9 @@ resource "google_compute_firewall" "server_access" {
   }
 }
 
-# Firewall rule for SSH access
+# Firewall rule for SSH access (conditionally created)
 resource "google_compute_firewall" "allow_ssh" {
+  count   = var.enable_ssh ? 1 : 0  # Create resource only if enable_ssh is true
   name    = "allow-ssh"
   network = google_compute_network.custom_network.name
 
@@ -44,20 +46,23 @@ resource "google_compute_firewall" "allow_ssh" {
   }
 }
 
-# Firewall rule to allow HTTP and HTTPS traffic
+# Firewall rule to allow HTTP and HTTPS traffic (conditionally created)
 resource "google_compute_firewall" "allow_http_https" {
+  count   = var.enable_http_https ? 1 : 0  # Create resource only if enable_http_https is true
   name    = "allow-http-https"
   network = google_compute_network.custom_network.name
+
+  source_ranges = var.ssh_source_ranges
 
   allow {
     protocol = "tcp"
     ports    = ["80", "443"]
   }
-     source_ranges = var.ssh_source_ranges
 }
 
-# Firewall rule for IAP access
+# Firewall rule for IAP access (always enabled)
 resource "google_compute_firewall" "iap_ssh" {
+  count   = var.enable_ssh ? 1 : 0  # Create resource only if enable_ssh is true
   name    = "iap-ssh-allow"
   network = google_compute_network.custom_network.name
 
