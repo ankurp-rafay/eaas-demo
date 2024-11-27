@@ -6,5 +6,4 @@ output "public_ip" {
 
 output "server_port" {
   value = var.server_port
-  description = "Port on which the server is listening"
 }
