@@ -44,6 +44,18 @@ resource "google_compute_firewall" "allow_ssh" {
   }
 }
 
+# Firewall rule to allow HTTP and HTTPS traffic
+resource "google_compute_firewall" "allow_http_https" {
+  name    = "allow-http-https"
+  network = google_compute_network.custom_network.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80", "443"]
+  }
+     source_ranges = var.ssh_source_ranges
+}
+
 # Firewall rule for IAP access
 resource "google_compute_firewall" "iap_ssh" {
   name    = "iap-ssh-allow"
