@@ -6,7 +6,7 @@ provider "google" {
 
 # Create a Google Compute Firewall
 resource "google_compute_firewall" "instance" {
-  name    = "terraform-example-instance"
+  name    = var.firewall_name   # Use the variable for firewall name
   network = "default"
 
   source_ranges = ["0.0.0.0/0"]
@@ -37,22 +37,36 @@ resource "google_compute_instance" "example" {
     }
   }
   
-  tags = ["terraform-example"]
+  tags = var.vm_tags               # Use the variable for VM tags
+
+
+  dynamic "confidential_instance_config" {
+    for_each = var.enable_confidential_compute ? [1] : []
+    content {
+      enable_confidential_compute = var.enable_confidential_compute
+    }
+  }
   
   metadata_startup_script = <<-EOT
     #!/bin/bash
     apt update
     apt install -y nginx
+
+    # Configure NGINX to listen on the specified port
+    sed -i "s/listen 80 default_server;/listen ${var.server_port} default_server;/g" /etc/nginx/sites-available/default
+    sed -i "s/listen \\[::\\]:80 default_server;/listen \\[::\\]:${var.server_port} default_server;/g" /etc/nginx/sites-available/default
+
     echo '<!DOCTYPE html>
     <html>
     <head>
       <title>Welcome to NGINX</title>
     </head>
     <body>
-      <h1>Hello from NGINX!</h1>
+      <h1>Hello from NGINX on Port ${var.server_port}!</h1>
     </body>
     </html>' > /var/www/html/index.html
+
     systemctl enable nginx
-    systemctl start nginx
+    systemctl restart nginx
   EOT
 }

@@ -46,3 +46,23 @@ variable "image" {
   description = "Boot image for the Google Cloud instance"
   default     = "ubuntu-2204-lts"
 }
+
+variable "enable_confidential_compute" {
+  type        = bool
+  description = "Flag to enable Confidential VM (Confidential Compute)"
+  default     = false
+}
+
+variable "vm_tags" {
+  type        = list(string)
+  description = "Tags assigned to the virtual machine"
+  default     = ["terraform-example"]
+}
+
+
+variable "firewall_name" {
+  type        = string
+  description = "Name of the firewall rule"
+  default     = "terraform-example-instance"
+}
+
