@@ -23,7 +23,7 @@ variable "project_id" {
 variable "region" {
   type        = string
   description = "Region for the Google Cloud resources"
-  default     = "us-central"
+  default     = "us-central1"
 }
 
 # Variable for the zone
@@ -66,3 +66,39 @@ variable "firewall_name" {
   default     = "terraform-example-instance"
 }
 
+variable "network_name" {
+  type        = string
+  description = "Name of the custom network"
+  default     = "custom-network"
+}
+
+variable "subnet_name" {
+  type        = string
+  description = "Name of the custom subnet"
+  default     = "custom-subnet"
+}
+
+variable "subnet_cidr_range" {
+  type        = string
+  description = "CIDR range for the custom subnet"
+  default     = "10.0.0.0/24"
+}
+
+variable "server_source_ranges" {
+  type        = list(string)
+  description = "Source ranges for server traffic"
+  default     = ["0.0.0.0/0"]
+}
+
+
+variable "ssh_source_ranges" {
+  type        = list(string)
+  description = "Source ranges for SSH traffic"
+  default     = ["0.0.0.0/0"]
+}
+
+variable "iap_source_ranges" {
+  type        = list(string)
+  description = "Source ranges for IAP traffic"
+  default     = ["35.235.240.0/20"]
+}
