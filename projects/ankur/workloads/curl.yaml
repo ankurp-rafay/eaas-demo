@@ -1,0 +1,15 @@
+apiVersion: apps.k8smgmt.io/v3
+kind: Workload
+metadata:
+  name: curl
+  project: ankur
+spec:
+  artifact:
+    artifact:
+      paths:
+      - name: file://artifacts/curl/curl.yaml
+    type: Yaml
+  namespace: test
+  placement:
+    selector: rafay.dev/clusterName=eks-cilium
+  version: curl-v1-202402221053460000

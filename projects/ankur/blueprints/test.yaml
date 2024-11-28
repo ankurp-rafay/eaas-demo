@@ -1,0 +1,33 @@
+apiVersion: infra.k8smgmt.io/v3
+kind: Blueprint
+metadata:
+  name: test
+  project: ankur
+spec:
+  base:
+    name: default
+    version: 1.26.0
+  defaultAddons:
+    enableIngress: true
+    enableMonitoring: true
+    monitoring:
+      helmExporter:
+        enabled: true
+      kubeStateMetrics:
+        customizationEnabled: true
+        discovery:
+          namespace: test
+          resource: pod
+      metricsServer:
+        customizationEnabled: true
+      nodeExporter:
+        customizationEnabled: true
+        discovery:
+          namespace: test
+          resource: pod
+      prometheusAdapter:
+        enabled: true
+  driftWebhook:
+    enabled: true
+  type: custom
+  version: v2

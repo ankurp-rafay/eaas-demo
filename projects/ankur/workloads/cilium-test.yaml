@@ -1,0 +1,21 @@
+apiVersion: apps.k8smgmt.io/v3
+kind: Workload
+metadata:
+  name: cilium-test
+  project: ankur
+spec:
+  artifact:
+    artifact:
+      catalog: default-bitnami
+      chartName: nginx
+      chartVersion: 15.12.1
+      valuesPaths:
+      - name: file://artifacts/cilium-test/values (1).yaml
+    options:
+      maxHistory: 10
+      timeout: 5m0s
+    type: Helm
+  namespace: test
+  placement:
+    selector: rafay.dev/clusterName=eks-cilium
+  version: cilium-test-v1-202402221051190000
